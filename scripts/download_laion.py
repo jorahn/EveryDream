@@ -183,7 +183,7 @@ async def call_http(image_url: str, session: aiohttp.ClientSession):
     global http_timeout
     global current_parquet_file_downloaded_count
     try:
-        res = await session.request(method="GET", url=image_url, timeout=http_timeout)
+        res = await session.request(method="GET", url=image_url, timeout=http_timeout, ssl=False)
         
         if (res.status == 200):            
             return await res.content.read()
@@ -264,7 +264,7 @@ async def download_set_dict(opt, matches_dict: dict):
 
                 if not opt.test:
                     tasks.append(
-                        download_image(image_url=image_url, clean_text=clean_text, full_outpath_noext=full_outpath_noext, session=session)              
+                        await download_image(image_url=image_url, clean_text=clean_text, full_outpath_noext=full_outpath_noext, session=session)              
                     )
                 else:
                     current_parquet_file_downloaded_count += 1
